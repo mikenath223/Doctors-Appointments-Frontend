@@ -6,7 +6,7 @@ This project is the frontend for the doctors appointment booking application.
 
 ## Prerequisites
 
-- Node.js (version 14 or higher)
+- Node.js (version 18 or higher)
 - npm or yarn
 - firebase auth
 
