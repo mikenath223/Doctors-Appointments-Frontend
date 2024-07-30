@@ -66,6 +66,7 @@ export const useBookAppointment = () => {
     handleCancel,
     setPurpose,
     bookAppointment,
+    purpose,
     isLoading,
   };
 };

@@ -25,6 +25,7 @@ const Router = () => {
 
         if (docSnap.exists()) {
           dispatch(setUser({ uid: user.uid, ...docSnap.data() }));
+          console.log(docSnap.data(), "");
         } else {
           dispatch(setUser(user));
         }
@@ -36,6 +37,8 @@ const Router = () => {
 
     return () => unsubscribe();
   }, [dispatch]);
+
+  // console.log(user, "this is the usw");
 
   return (
     <BrowserRouter>

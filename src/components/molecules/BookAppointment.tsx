@@ -24,6 +24,7 @@ const BookAppointment: React.FC<BookAppointmentProp> = ({ availability }) => {
     setPurpose,
     isLoading,
     bookAppointment,
+    purpose,
   } = useBookAppointment();
 
   return (
@@ -37,6 +38,7 @@ const BookAppointment: React.FC<BookAppointmentProp> = ({ availability }) => {
       >
         <CustomInput
           onChange={(e) => setPurpose(e.target.value)}
+          value={purpose}
           type="textArea"
           label="Purpose of booking appointment"
           className="h-[150px]"
