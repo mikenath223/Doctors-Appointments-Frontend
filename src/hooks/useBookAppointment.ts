@@ -18,8 +18,9 @@ export const useBookAppointment = () => {
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [purpose, setPurpose] = useState<string>("");
 
+  const { id, dependentId } = useParams();
   const { user } = useAppSelector((store) => store.userSlice);
-  const { id } = useParams();
+  const userId = dependentId || user?.id;
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -32,7 +33,7 @@ export const useBookAppointment = () => {
         doctorId: id,
         date: selectedDate,
         startTime: selectedTime,
-        userId: user?.id,
+        userId,
         purpose,
       });
       setLoading(false);

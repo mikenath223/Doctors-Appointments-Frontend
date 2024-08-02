@@ -11,6 +11,7 @@ import { setLoadingUserData, setUser } from "../infrastructure/slice/userSlice";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../infrastructure/firebase";
 import Appointments from "../pages/dashboard/Appointments";
+import Profiles from "../pages/dashboard/Profiles";
 
 const Router = () => {
   const { user } = useAppSelector((state) => state.userSlice);
@@ -58,9 +59,20 @@ const Router = () => {
           )}
           {user ? (
             <>
-              <Route path="" element={<Dashboard />} />
-              <Route path="doctor/:id" element={<DoctorDetails />} />
-              <Route path="appointments" element={<Appointments />} />
+              <Route path="" element={<Dashboard isShowProfile />} />
+              <Route
+                path="/book-dependent-appointment/:dependentId"
+                element={<Dashboard />}
+              />
+              <Route
+                path="/book-dependent-appointment?/:dependentId?/doctor/:id"
+                element={<DoctorDetails />}
+              />
+              <Route
+                path="appointments/:dependentId"
+                element={<Appointments />}
+              />
+              <Route path="profiles" element={<Profiles />} />
             </>
           ) : (
             <Route path="/*" element={<Navigate to="/login" replace />} />

@@ -1,14 +1,18 @@
 import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Button } from "../../components/atoms/Button";
 import { CustomInput } from "../../components/atoms/Input";
 import DoctorCard from "../../components/molecules/DoctorCard";
 import { Doctor } from "../../domain/user";
 import { useDoctor } from "../../hooks/useDoctor";
 
-const Dashboard: React.FC = () => {
+interface IDashboardProps {
+  isShowProfile?: boolean;
+}
+
+const Dashboard: React.FC<IDashboardProps> = ({ isShowProfile = false }) => {
   const {
     doctors,
     loader,
@@ -20,11 +24,24 @@ const Dashboard: React.FC = () => {
     setIsSearch,
     isLastItem,
   } = useDoctor();
+  const { dependentId } = useParams();
   return (
     <div>
       <div className="flex items-center justify-between py-[1rem] mt-3">
-        <h3 className="font-bold text-[20px]">Find Doctors</h3>
-        <Link to="/appointments">
+        <div>
+          <h3 className="font-bold text-[20px]">Find Doctors</h3>
+          {!isShowProfile && (
+            <h3 className="font-bold text-[20px]">
+              Book dependent appointments
+            </h3>
+          )}
+        </div>
+        {isShowProfile && (
+          <Link to="/profiles">
+            <Button label="Profiles" />
+          </Link>
+        )}
+        <Link to={`/appointments${dependentId ? `/${dependentId}` : ""}`}>
           <Button label="Appointment History" />
         </Link>
       </div>

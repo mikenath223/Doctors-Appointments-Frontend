@@ -4,6 +4,7 @@ import { Appointment } from "../domain/appointment";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useAppSelector } from "../infrastructure/store";
+import { useParams } from "react-router-dom";
 
 const fetchAppointmentURl = "http://localhost:8083/getAppointments";
 
@@ -15,13 +16,15 @@ export const useAppointment = () => {
   const [isFetchingAppointments, setIsFetchingAppointments] =
     useState<boolean>(false);
 
+  const { dependentId } = useParams();
   const { user } = useAppSelector((state) => state.userSlice);
+  const userId = dependentId || user?.id;
 
   const fetchAppointments = async () => {
     setIsFetchingAppointments(true);
     try {
       const response = await axios.get(
-        `${fetchAppointmentURl}?userId=${user?.id}`
+        `${fetchAppointmentURl}?userId=${userId}`
       );
       setAppointments(response.data.appointments);
       setIsFetchingAppointments(false);
