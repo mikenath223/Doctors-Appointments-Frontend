@@ -1,9 +1,10 @@
-import { HeartOutlined } from "@ant-design/icons";
+import { HeartOutlined, WalletOutlined } from "@ant-design/icons";
 import { Image } from "antd";
 import React from "react";
 import ActiveDot from "../atoms/ActiveDot";
 import { Button } from "../atoms/Button";
 import { useNavigate } from "react-router-dom";
+import { DEFAULT_APPOINTMENT_PRICE } from "../../constants/payment.constants";
 
 export interface DoctorCardProp {
   name: string;
@@ -54,6 +55,10 @@ const DoctorCard: React.FC<DoctorCardProp> = ({
               <ActiveDot />
               <p>{userStoriesCount} patient stories</p>
             </div>
+          </div>
+          <div className="flex items-center gap-1">
+            <WalletOutlined />
+            <p className="text-gray-600">{`${DEFAULT_APPOINTMENT_PRICE.amount} ${DEFAULT_APPOINTMENT_PRICE.currency}`}</p>
           </div>
         </div>
       </div>

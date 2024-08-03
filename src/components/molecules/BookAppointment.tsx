@@ -5,6 +5,12 @@ import { Button } from "../atoms/Button";
 import BasicDateCalendar from "../atoms/DateCalender";
 import CustomModal from "./CustomModal";
 import { CustomInput } from "../atoms/Input";
+import { usePayment } from "../../hooks/usePayment";
+import { InfoCircleFilled } from "@ant-design/icons";
+import { DEFAULT_APPOINTMENT_PRICE } from "../../constants/payment.constants";
+import { CustomDropdown } from "../atoms/Dropdown";
+import { FormHookForm } from "./Form";
+import { IBookAppointmentFormData } from "../../domain/appointment";
 
 interface BookAppointmentProp {
   availability?: Availability[];
@@ -21,11 +27,27 @@ const BookAppointment: React.FC<BookAppointmentProp> = ({ availability }) => {
     setSelectedDate,
     setSelectedTime,
     showModal,
-    setPurpose,
     isLoading,
     bookAppointment,
-    purpose,
+    consultationOptions,
+    formMethods,
   } = useBookAppointment();
+  const { handleFlutterPayment, closePaymentModal } = usePayment();
+  const {
+    handleSubmit,
+    formState: { errors, isValid },
+  } = formMethods;
+
+  const onSubmit = (data: IBookAppointmentFormData) => {
+    handleFlutterPayment({
+      callback: () => {
+        bookAppointment(data);
+        closePaymentModal();
+      },
+      onClose: () => {},
+    });
+  };
+  const purposeInputError = errors["purpose"];
 
   return (
     <div className="">
@@ -33,17 +55,32 @@ const BookAppointment: React.FC<BookAppointmentProp> = ({ availability }) => {
         title="Book Appointment"
         isOpen={isModalOpen}
         handleCancel={handleCancel}
-        handleOk={bookAppointment}
+        handleOk={handleSubmit(onSubmit)}
         isLoading={isLoading}
       >
-        <CustomInput
-          onChange={(e) => setPurpose(e.target.value)}
-          value={purpose}
-          type="textArea"
-          label="Purpose of booking appointment"
-          className="h-[150px]"
-          placeholder="Please tell us the purpose of this appointment"
-        />
+        <FormHookForm<IBookAppointmentFormData> {...formMethods}>
+          <CustomInput
+            type="textArea"
+            label="Purpose of booking appointment"
+            className="h-[150px] mb-4"
+            placeholder="Please tell us the purpose of this appointment"
+            error={
+              !isValid && purposeInputError
+                ? (purposeInputError.message as string)
+                : undefined
+            }
+            formkey="purpose"
+          />
+          <CustomDropdown
+            label="Select Consultation Preference"
+            options={consultationOptions}
+            formkey="consultation"
+          />
+          <div className="flex items-center gap-1 mt-2">
+            <InfoCircleFilled />
+            <p className="text-gray-600">{`You'll be charged ${DEFAULT_APPOINTMENT_PRICE.amount} ${DEFAULT_APPOINTMENT_PRICE.currency}`}</p>
+          </div>
+        </FormHookForm>
       </CustomModal>
       <div className="flex items-center">
         <BasicDateCalendar

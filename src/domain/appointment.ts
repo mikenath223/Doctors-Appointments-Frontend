@@ -35,3 +35,15 @@ export interface Appointment {
     updatedAt: string;
   };
 }
+
+export enum CONSULTATION_TYPE {
+  messaging = "MESSAGING",
+  voiceCall = "VOICE_CALL",
+  videoCall = "VIDEO_CALL",
+  inPerson = "IN_PERSON",
+}
+
+export interface IBookAppointmentFormData {
+  consultation: CONSULTATION_TYPE;
+  purpose: string;
+}

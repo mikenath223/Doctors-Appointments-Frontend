@@ -1,7 +1,7 @@
-import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
+import { CloseOutlined, LeftOutlined, SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button } from "../../components/atoms/Button";
 import { CustomInput } from "../../components/atoms/Input";
 import DoctorCard from "../../components/molecules/DoctorCard";
@@ -25,9 +25,11 @@ const Dashboard: React.FC<IDashboardProps> = ({ isShowProfile = false }) => {
     isLastItem,
   } = useDoctor();
   const { dependentId } = useParams();
+  const navigate = useNavigate();
   return (
     <div>
       <div className="flex items-center justify-between py-[1rem] mt-3">
+        <LeftOutlined onClick={() => navigate(-1)} />
         <div>
           <h3 className="font-bold text-[20px]">Find Doctors</h3>
           {!isShowProfile && (

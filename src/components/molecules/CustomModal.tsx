@@ -31,10 +31,11 @@ const CustomModal: React.FC<CustomModalProp> = ({
           <Button
             key="submit"
             type="primary"
+            typeof="submit"
             loading={isLoading}
             onClick={handleOk}
           >
-            Book Appointment
+            Make Payment
           </Button>,
         ]}
       >

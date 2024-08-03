@@ -2,6 +2,7 @@
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { Input } from "antd";
 import React from "react";
+import { useFormContext } from "react-hook-form";
 
 interface CustomInput {
   label?: string;
@@ -14,6 +15,7 @@ interface CustomInput {
   readOnly?: boolean;
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
+  formkey?: string;
 }
 
 export const CustomInput: React.FC<CustomInput> = ({
@@ -27,7 +29,10 @@ export const CustomInput: React.FC<CustomInput> = ({
   className,
   suffix,
   prefix,
+  formkey,
 }) => {
+  const { watch, setValue } = useFormContext() ?? {};
+
   return (
     <div className="w-full flex flex-col">
       {label && (
@@ -66,15 +71,19 @@ export const CustomInput: React.FC<CustomInput> = ({
       {type === "textArea" && (
         <Input.TextArea
           readOnly={readOnly}
-          id={label}
           className={`h-[400px] w-[100%] text-lg ${className}`}
-          value={value}
+          value={watch(formkey || "purpose") || value}
+          onChange={(e) => {
+            setValue(formkey || "purpose", e.target.value);
+            onChange && onChange(e as any);
+          }}
           placeholder={placeholder}
-          onChange={(e) => onChange && onChange(e as any)}
         />
       )}
       {error && (
-        <p className="text-xs text-red-600 ml-[.4rem] capitalize">{error}</p>
+        <p className="text-xs text-red-600 ml-[.4rem] -mt-3 capitalize">
+          {error}
+        </p>
       )}
     </div>
   );

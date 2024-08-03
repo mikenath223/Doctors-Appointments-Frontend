@@ -69,7 +69,7 @@ const Router = () => {
                 element={<DoctorDetails />}
               />
               <Route
-                path="appointments/:dependentId"
+                path="appointments/:dependentId?"
                 element={<Appointments />}
               />
               <Route path="profiles" element={<Profiles />} />

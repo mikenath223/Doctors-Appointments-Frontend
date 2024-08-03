@@ -1,13 +1,13 @@
 import { LeftOutlined } from "@ant-design/icons";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
 import { useMockUsers } from "../../hooks/useMockUsers";
 import AddDependentsModal from "../../components/molecules/AddDependentsModal";
 import MockUserCard from "../../components/molecules/MockUserCard";
 import { MockUser, User } from "../../domain/user";
 import { useUserDependents } from "../../hooks/useUserDependents";
 import UserDependentCard from "../../components/molecules/UserDependentCard";
+import { Button } from "../../components/atoms/Button";
 
 const Profiles: React.FC = () => {
   const navigate = useNavigate();
@@ -35,9 +35,7 @@ const Profiles: React.FC = () => {
       </div>
 
       <div className="w-full px-4">
-        <Button variant="contained" color="secondary" onClick={showModal}>
-          Add Profile
-        </Button>
+        <Button label="Add Profile" activeClass onClick={showModal} />
         <div className="space-y-3 max-h-[680px] overflow-y-auto mt-5">
           {dependents?.map((user: User, _index: number) => (
             <UserDependentCard
@@ -49,7 +47,7 @@ const Profiles: React.FC = () => {
             />
           ))}
           {dependentIsLoading ? (
-            <h3 className="text-center">Fetching mock users...</h3>
+            <h3 className="text-center">Fetching profiles...</h3>
           ) : !dependents || dependents.length === 0 ? (
             <h3 className="text-center">No profiles found.</h3>
           ) : null}
