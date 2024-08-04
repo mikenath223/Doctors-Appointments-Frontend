@@ -12,7 +12,7 @@ import BookAppointment from "../../components/molecules/BookAppointment";
 import { DEFAULT_APPOINTMENT_PRICE } from "../../constants/payment.constants";
 
 const DoctorDetails: React.FC = () => {
-  const { doctorDetails, isLoading } = useDoctorDetails();
+  const { doctorDetails, isLoading, fetchDoctorDetails } = useDoctorDetails();
   const navigate = useNavigate();
 
   return (
@@ -59,7 +59,10 @@ const DoctorDetails: React.FC = () => {
             <p>{doctorDetails?.about}</p>
           </div>
 
-          <BookAppointment availability={doctorDetails?.availability} />
+          <BookAppointment
+            availability={doctorDetails?.availability}
+            fetchDoctorDetails={fetchDoctorDetails}
+          />
         </div>
       )}
     </div>

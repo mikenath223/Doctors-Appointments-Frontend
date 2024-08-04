@@ -1,4 +1,5 @@
 export interface Appointment {
+  id: string;
   date: string;
   createdAt: {
     _seconds: number;
@@ -34,6 +35,10 @@ export interface Appointment {
     phoneNo: string;
     updatedAt: string;
   };
+  meetingLink: string;
+  amountPaid: string;
+  refundAmount: string;
+  consultation: CONSULTATION_TYPE;
 }
 
 export enum CONSULTATION_TYPE {

@@ -43,5 +43,6 @@ export const useAppointment = () => {
     currTab,
     isFetchingAppointments,
     setCurrTab,
+    fetchAppointments,
   };
 };

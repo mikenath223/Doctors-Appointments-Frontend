@@ -11,12 +11,18 @@ import { DEFAULT_APPOINTMENT_PRICE } from "../../constants/payment.constants";
 import { CustomDropdown } from "../atoms/Dropdown";
 import { FormHookForm } from "./Form";
 import { IBookAppointmentFormData } from "../../domain/appointment";
+import { useParams } from "react-router-dom";
+import { useAppointmentManagement } from "../../hooks/useAppointmentManagement";
 
 interface BookAppointmentProp {
   availability?: Availability[];
+  fetchDoctorDetails: () => Promise<void>;
 }
 
-const BookAppointment: React.FC<BookAppointmentProp> = ({ availability }) => {
+const BookAppointment: React.FC<BookAppointmentProp> = ({
+  availability,
+  fetchDoctorDetails,
+}) => {
   const {
     availabilityTime,
     handleCancel,
@@ -40,14 +46,28 @@ const BookAppointment: React.FC<BookAppointmentProp> = ({ availability }) => {
 
   const onSubmit = (data: IBookAppointmentFormData) => {
     handleFlutterPayment({
-      callback: () => {
-        bookAppointment(data);
+      callback: async () => {
+        await bookAppointment(data);
+        await fetchDoctorDetails();
         closePaymentModal();
       },
       onClose: () => {},
     });
   };
   const purposeInputError = errors["purpose"];
+  const params = useParams();
+  const { appointmentId: rescheduleAppointmentId } = params;
+
+  const { rescheduleAppointment, isLoading: isReschedulingLoading } =
+    useAppointmentManagement();
+
+  const onRescheduleAppointment = async () => {
+    await rescheduleAppointment(selectedDate, selectedTime);
+    await fetchDoctorDetails();
+  };
+
+  const renderReschedulingText = () =>
+    isReschedulingLoading ? "Rescheduling..." : "Reschedule Appointment";
 
   return (
     <div className="">
@@ -76,10 +96,12 @@ const BookAppointment: React.FC<BookAppointmentProp> = ({ availability }) => {
             options={consultationOptions}
             formkey="consultation"
           />
-          <div className="flex items-center gap-1 mt-2">
-            <InfoCircleFilled />
-            <p className="text-gray-600">{`You'll be charged ${DEFAULT_APPOINTMENT_PRICE.amount} ${DEFAULT_APPOINTMENT_PRICE.currency}`}</p>
-          </div>
+          {!rescheduleAppointmentId && (
+            <div className="flex items-center gap-1 mt-2">
+              <InfoCircleFilled />
+              <p className="text-gray-600">{`You'll be charged ${DEFAULT_APPOINTMENT_PRICE.amount} ${DEFAULT_APPOINTMENT_PRICE.currency}`}</p>
+            </div>
+          )}
         </FormHookForm>
       </CustomModal>
       <div className="flex items-center">
@@ -107,10 +129,16 @@ const BookAppointment: React.FC<BookAppointmentProp> = ({ availability }) => {
         </div>
       </div>
       <Button
-        label="Book Appointment"
+        label={
+          rescheduleAppointmentId
+            ? renderReschedulingText()
+            : "Book Appointment"
+        }
         className="rounded-xl"
         isDisabled={!selectedDate || !selectedTime}
-        onClick={showModal}
+        onClick={() =>
+          rescheduleAppointmentId ? onRescheduleAppointment() : showModal()
+        }
       />
     </div>
   );

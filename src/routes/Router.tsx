@@ -65,7 +65,7 @@ const Router = () => {
                 element={<Dashboard />}
               />
               <Route
-                path="/book-dependent-appointment?/:dependentId?/doctor/:id"
+                path="/book-dependent-appointment?/:dependentId?/reschedule-appointment?/:appointmentId?/doctor/:id"
                 element={<DoctorDetails />}
               />
               <Route

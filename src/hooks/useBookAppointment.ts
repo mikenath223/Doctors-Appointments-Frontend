@@ -28,9 +28,6 @@ export const useBookAppointment = () => {
   const formMethods = useForm({
     resolver: yupResolver(validationSchema),
     mode: "onSubmit",
-    defaultValues: {
-      consultation: "" as CONSULTATION_TYPE,
-    },
   });
   const { reset } = formMethods;
   const { id, dependentId } = useParams();

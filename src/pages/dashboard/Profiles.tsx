@@ -22,10 +22,14 @@ const Profiles: React.FC = () => {
   } = useMockUsers();
   const {
     dependents,
-    loader: dependentLoader,
     isLoading: dependentIsLoading,
-    isLastItem: isDependentLastItem,
+    fetchUserDependents,
   } = useUserDependents();
+
+  const onCloseModal = () => {
+    fetchUserDependents();
+    hideModal();
+  };
 
   return (
     <div>
@@ -51,15 +55,11 @@ const Profiles: React.FC = () => {
           ) : !dependents || dependents.length === 0 ? (
             <h3 className="text-center">No profiles found.</h3>
           ) : null}
-
-          {!isDependentLastItem && (
-            <div ref={dependentLoader} className="h-10 w-full" />
-          )}
         </div>
         <AddDependentsModal
           isOpen={isModalOpen}
           title="Add Dependents"
-          handleCancel={hideModal}
+          handleCancel={onCloseModal}
         >
           <div className="max-h-[700px] overflow-y-auto space-y-[1rem] mt-2">
             {mockUsers?.map((user: MockUser, _index: number) => (
