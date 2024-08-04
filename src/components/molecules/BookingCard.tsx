@@ -10,7 +10,12 @@ import React from "react";
 import { Button } from "../atoms/Button";
 import { useNavigate } from "react-router-dom";
 import { useAppointmentManagement } from "../../hooks/useAppointmentManagement";
-import { APPOINTMENT_STATUS } from "../../domain/appointment";
+import {
+  APPOINTMENT_STATUS,
+  CONFIRM_ACTION_TYPE,
+} from "../../domain/appointment";
+import ConfirmationModal from "./ConfirmationModal";
+import { useConfirmAction } from "../../hooks/useConfirmAction";
 
 export interface BookingCardProp {
   date: string;
@@ -24,7 +29,7 @@ export interface BookingCardProp {
   amountPaid?: string;
   doctorId: string;
   appointmentId: string;
-  fetchAppointments: () => void;
+  fetchAppointments: () => Promise<void>;
   appointMentStatus: APPOINTMENT_STATUS;
 }
 const BookingCard: React.FC<BookingCardProp> = ({
@@ -49,6 +54,19 @@ const BookingCard: React.FC<BookingCardProp> = ({
     await cancelAppointment(appointmentId);
     await fetchAppointments();
   };
+
+  const onReschedule = () =>
+    navigate(`/reschedule-appointment/${appointmentId}/doctor/${doctorId}`);
+
+  const {
+    handleOk,
+    title,
+    message,
+    setActionType,
+    isOpen,
+    handleCancel,
+    setIsOpen,
+  } = useConfirmAction(onCancelAppointment, onReschedule, name);
 
   const isAppointmentButtonsDisabled =
     appointMentStatus !== APPOINTMENT_STATUS.upcoming;
@@ -99,23 +117,34 @@ const BookingCard: React.FC<BookingCardProp> = ({
         <Button
           label={isLoading ? "Cancelling..." : "Cancel"}
           isDisabled={isAppointmentButtonsDisabled || isLoading}
-          onClick={onCancelAppointment}
+          onClick={() => {
+            setIsOpen(true);
+            setActionType(CONFIRM_ACTION_TYPE.CANCEL_APPOINTMENT);
+          }}
           className="rounded-3xl h-[40px]"
         />
         <Button
           label="Reschedule"
           className="rounded-3xl text-white h-[40px] disabled:text-gray-400"
-          onClick={() =>
-            navigate(
-              `/reschedule-appointment/${appointmentId}/doctor/${doctorId}`
-            )
-          }
+          onClick={() => {
+            setIsOpen(true);
+            setActionType(CONFIRM_ACTION_TYPE.RESCHEDULE_APPOINTMENT);
+          }}
           isDisabled={isAppointmentButtonsDisabled}
           style={{
             backgroundColor: "#1818A6",
           }}
         />
       </div>
+      <ConfirmationModal
+        title={title}
+        handleOk={handleOk}
+        handleCancel={handleCancel}
+        isOpen={isOpen}
+        isLoading={isLoading}
+      >
+        {message}
+      </ConfirmationModal>
     </div>
   );
 };

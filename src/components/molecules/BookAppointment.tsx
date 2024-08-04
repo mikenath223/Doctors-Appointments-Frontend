@@ -135,7 +135,7 @@ const BookAppointment: React.FC<BookAppointmentProp> = ({
             : "Book Appointment"
         }
         className="rounded-xl"
-        isDisabled={!selectedDate || !selectedTime}
+        isDisabled={!selectedDate || !selectedTime || isReschedulingLoading}
         onClick={() =>
           rescheduleAppointmentId ? onRescheduleAppointment() : showModal()
         }
