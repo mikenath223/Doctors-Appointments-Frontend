@@ -9,7 +9,7 @@ export interface Appointment {
   purpose: string;
   time: string;
   userId: string;
-  status: string;
+  status: APPOINTMENT_STATUS;
   updatedAt: {
     _seconds: number;
     _nanoseconds: number;
@@ -51,4 +51,10 @@ export enum CONSULTATION_TYPE {
 export interface IBookAppointmentFormData {
   consultation: CONSULTATION_TYPE;
   purpose: string;
+}
+
+export enum APPOINTMENT_STATUS {
+  upcoming = "UPCOMING",
+  cancelled = "CANCELLED",
+  completed = "COMPLETED",
 }

@@ -4,6 +4,12 @@ import { FlutterwaveConfig } from "flutterwave-react-v3/dist/types";
 import { useAppSelector } from "../infrastructure/store";
 import { useParams } from "react-router-dom";
 
+const generateUniqueTransactionRef = (userId: string, doctorId: string) => {
+  return `${userId}-${doctorId}-${Math.floor(
+    Math.random() * 1000000
+  )}-${new Date().getTime()}`;
+};
+
 export const usePayment = () => {
   const { user } = useAppSelector((store) => store.userSlice);
   const { id, dependentId } = useParams();
@@ -11,7 +17,7 @@ export const usePayment = () => {
 
   const config: FlutterwaveConfig = {
     public_key: import.meta.env.VITE_FLUTTERWAVE_PUBLIC_KEY,
-    tx_ref: new Date().toString(),
+    tx_ref: generateUniqueTransactionRef(userId ?? "", id ?? ""),
     amount: DEFAULT_APPOINTMENT_PRICE.amount,
     currency: DEFAULT_APPOINTMENT_PRICE.currency,
     payment_options: "card,mobilemoney,ussd",

@@ -10,6 +10,7 @@ import React from "react";
 import { Button } from "../atoms/Button";
 import { useNavigate } from "react-router-dom";
 import { useAppointmentManagement } from "../../hooks/useAppointmentManagement";
+import { APPOINTMENT_STATUS } from "../../domain/appointment";
 
 export interface BookingCardProp {
   date: string;
@@ -24,6 +25,7 @@ export interface BookingCardProp {
   doctorId: string;
   appointmentId: string;
   fetchAppointments: () => void;
+  appointMentStatus: APPOINTMENT_STATUS;
 }
 const BookingCard: React.FC<BookingCardProp> = ({
   date,
@@ -38,6 +40,7 @@ const BookingCard: React.FC<BookingCardProp> = ({
   doctorId,
   appointmentId,
   fetchAppointments,
+  appointMentStatus,
 }) => {
   const navigate = useNavigate();
   const { cancelAppointment, isLoading } = useAppointmentManagement();
@@ -46,6 +49,9 @@ const BookingCard: React.FC<BookingCardProp> = ({
     await cancelAppointment(appointmentId);
     await fetchAppointments();
   };
+
+  const isAppointmentButtonsDisabled =
+    appointMentStatus !== APPOINTMENT_STATUS.upcoming;
 
   return (
     <div className="rounded-lg drop-shadow-lg border p-4 space-y-2">
@@ -92,18 +98,19 @@ const BookingCard: React.FC<BookingCardProp> = ({
       <div className="flex items-center justify-between gap-[2rem]">
         <Button
           label={isLoading ? "Cancelling..." : "Cancel"}
-          isDisabled={isLoading}
+          isDisabled={isAppointmentButtonsDisabled || isLoading}
           onClick={onCancelAppointment}
           className="rounded-3xl h-[40px]"
         />
         <Button
           label="Reschedule"
-          className="rounded-3xl text-white h-[40px]"
+          className="rounded-3xl text-white h-[40px] disabled:text-gray-400"
           onClick={() =>
             navigate(
               `/reschedule-appointment/${appointmentId}/doctor/${doctorId}`
             )
           }
+          isDisabled={isAppointmentButtonsDisabled}
           style={{
             backgroundColor: "#1818A6",
           }}
