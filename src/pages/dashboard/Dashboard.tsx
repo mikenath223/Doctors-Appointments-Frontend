@@ -70,8 +70,8 @@ const Dashboard: React.FC<IDashboardProps> = ({ isShowProfile = false }) => {
             doctorPhoto={doctor.photo}
             experience={doctor.profileInfo.experience}
             name={doctor.name}
-            nextAvailableTime={moment(`${doctor.nextAvailableSlot.date},
-              ${doctor.nextAvailableSlot.startTime}`).format(
+            nextAvailableTime={moment(`${doctor?.nextAvailableSlot?.date},
+              ${doctor?.nextAvailableSlot?.startTime}`).format(
               "MMMM DD, YYYY h:mm A"
             )}
             specialty={doctor.specialty}
