@@ -123,8 +123,8 @@ const BookingCard: React.FC<BookingCardProp> = ({
       <hr />
       <div className="flex items-center justify-between gap-[2rem]">
         <Button
-          label={isLoading ? "Cancelling..." : "Cancel"}
-          isDisabled={isAppointmentButtonsDisabled || isLoading}
+          label={"Cancel"}
+          isDisabled={isAppointmentButtonsDisabled}
           onClick={() => {
             setIsOpen(true);
             setActionType(CONFIRM_ACTION_TYPE.CANCEL_APPOINTMENT);

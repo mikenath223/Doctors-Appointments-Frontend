@@ -12,6 +12,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../infrastructure/firebase";
 import Appointments from "../pages/dashboard/Appointments";
 import Profiles from "../pages/dashboard/Profiles";
+import { Loading } from "../components/molecules/Loading";
 
 const Router = () => {
   const { user, loading } = useAppSelector((state) => state.userSlice);
@@ -52,7 +53,8 @@ const Router = () => {
               <Route path="/*" element={<Navigate to="/login" replace />} />
             </>
           )}
-          {user && !loading && (
+          {!user && loading && <Route path="/*" element={<Loading />} />}
+          {user && (
             <>
               <Route path="" element={<Dashboard isShowProfile />} />
               <Route

@@ -35,7 +35,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProp> = ({
             loading={isLoading}
             onClick={handleOk}
           >
-            Confirm
+            {isLoading ? "Loading..." : "Confirm"}
           </Button>,
         ]}
       >
