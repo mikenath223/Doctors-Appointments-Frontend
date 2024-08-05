@@ -55,6 +55,7 @@ export const useMockUsers = () => {
 
   useIntersectionObserver({ containerRef: loader, onView: handlePagination }, [
     mockUsers,
+    isModalOpen,
   ]);
 
   return {

@@ -24,6 +24,8 @@ const Profiles: React.FC = () => {
     dependents,
     isLoading: dependentIsLoading,
     fetchUserDependents,
+    isLastItem: dependentIsLastItem,
+    loader: dependentLoader,
   } = useUserDependents();
 
   const onCloseModal = () => {
@@ -55,6 +57,9 @@ const Profiles: React.FC = () => {
           ) : !dependents || dependents.length === 0 ? (
             <h3 className="text-center">No profiles found.</h3>
           ) : null}
+          {!dependentIsLastItem && (
+            <div ref={dependentLoader} className="h-10 w-full" />
+          )}
         </div>
         <AddDependentsModal
           isOpen={isModalOpen}

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { User } from "../domain/user";
 import { useAppSelector } from "../infrastructure/store";
+import { useIntersectionObserver } from "./useIntersectionObserver";
 
 const fetchUserDependentsFunction = "http://localhost:8085/findUserDependents";
 
@@ -11,6 +12,9 @@ export const useUserDependents = () => {
   const [dependents, setDependents] = useState<Array<User> | null>(null);
   const { user } = useAppSelector((store) => store.userSlice);
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [isLastItem, setLastItem] = useState<boolean>(false);
+  const [limit, setLimit] = useState<number>(10);
+  const [offset, setOffset] = useState<number>(0);
 
   const loader = useRef<HTMLDivElement>(null);
 
@@ -19,9 +23,11 @@ export const useUserDependents = () => {
     try {
       const response = await axios.post(fetchUserDependentsFunction, {
         userId: user?.id,
+        limit,
+        offset,
       });
-
-      setDependents(response.data);
+      setDependents((prev) => [...(prev ?? []), ...response.data]);
+      setLastItem(response.data.length <= 0);
     } catch (e) {
       toast.error("Failed to fetch user dependents");
     } finally {
@@ -31,7 +37,15 @@ export const useUserDependents = () => {
 
   useEffect(() => {
     fetchUserDependents();
-  }, []);
+  }, [limit, offset]);
+
+  const handlePagination = () => {
+    setOffset((prevOffset) => prevOffset + 10);
+  };
+
+  useIntersectionObserver({ containerRef: loader, onView: handlePagination }, [
+    dependents,
+  ]);
 
   return {
     dependents,
@@ -39,5 +53,8 @@ export const useUserDependents = () => {
     loader,
     isLoading,
     fetchUserDependents,
+    isLastItem,
+    setOffset,
+    setLimit,
   };
 };
