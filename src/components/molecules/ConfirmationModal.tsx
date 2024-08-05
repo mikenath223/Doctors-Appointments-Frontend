@@ -31,6 +31,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProp> = ({
             key="submit"
             type="primary"
             typeof="submit"
+            className="bg-green-600 hover:!bg-green-700"
             loading={isLoading}
             onClick={handleOk}
           >

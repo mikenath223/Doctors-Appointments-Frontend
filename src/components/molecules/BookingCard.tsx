@@ -31,6 +31,7 @@ export interface BookingCardProp {
   appointmentId: string;
   fetchAppointments: () => Promise<void>;
   appointMentStatus: APPOINTMENT_STATUS;
+  amountRefunded?: string;
 }
 const BookingCard: React.FC<BookingCardProp> = ({
   date,
@@ -46,6 +47,7 @@ const BookingCard: React.FC<BookingCardProp> = ({
   appointmentId,
   fetchAppointments,
   appointMentStatus,
+  amountRefunded,
 }) => {
   const navigate = useNavigate();
   const { cancelAppointment, isLoading } = useAppointmentManagement();
@@ -93,21 +95,27 @@ const BookingCard: React.FC<BookingCardProp> = ({
             <p className="text-sm">{address}</p>
           </div>
           {meetingLink && (
-            <div className="flex items-center space-x-1 mt-2">
+            <div className="flex items-center space-x-1 mt-1">
               <VideoCameraOutlined className="text-green-500" />
               <p className="text-sm">{meetingLink}</p>
             </div>
           )}
           {consultation && (
-            <div className="flex items-center space-x-1 mt-2">
+            <div className="flex items-center space-x-1 mt-1">
               <IdcardOutlined className="text-red-500" />
               <p className="text-sm">{consultation}</p>
             </div>
           )}
           {amountPaid && (
-            <div className="flex items-center space-x-1 mt-2">
+            <div className="flex items-center space-x-1 mt-1">
               <WalletOutlined className="text-blue-500" />
-              <p className="text-sm">{amountPaid}</p>
+              <p className="text-sm">{`You paid ${amountPaid}`}</p>
+            </div>
+          )}
+          {amountRefunded && (
+            <div className="flex items-center space-x-1 mt-1">
+              <WalletOutlined className="text-red-500" />
+              <p className="text-sm">{`You've been refunded ${amountRefunded}`}</p>
             </div>
           )}
         </div>

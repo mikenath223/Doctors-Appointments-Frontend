@@ -66,6 +66,7 @@ const Appointments: React.FC = () => {
                 appointmentId={appointment.id}
                 fetchAppointments={fetchAppointments}
                 appointMentStatus={appointment.status}
+                amountRefunded={appointment.refundAmount}
               />
             ))
           ) : (
