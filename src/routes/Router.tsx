@@ -14,11 +14,10 @@ import Appointments from "../pages/dashboard/Appointments";
 import Profiles from "../pages/dashboard/Profiles";
 
 const Router = () => {
-  const { user } = useAppSelector((state) => state.userSlice);
+  const { user, loading } = useAppSelector((state) => state.userSlice);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(setLoadingUserData(true));
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user && user.emailVerified) {
         const docRef = doc(db, "users", user.uid);
@@ -45,19 +44,15 @@ const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<AppLayout />}>
-          {!user ? (
+          {!user && !loading && (
             <>
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
               <Route path="" element={<Navigate to="/login" replace />} />
-            </>
-          ) : (
-            <>
-              <Route path="/login" element={<Navigate to="/" replace />} />
-              <Route path="/register" element={<Navigate to="/" replace />} />
+              <Route path="/*" element={<Navigate to="/login" replace />} />
             </>
           )}
-          {user ? (
+          {user && !loading && (
             <>
               <Route path="" element={<Dashboard isShowProfile />} />
               <Route
@@ -74,8 +69,12 @@ const Router = () => {
               />
               <Route path="profiles" element={<Profiles />} />
             </>
-          ) : (
-            <Route path="/*" element={<Navigate to="/login" replace />} />
+          )}
+          {user && (
+            <>
+              <Route path="/login" element={<Navigate to="/" replace />} />
+              <Route path="/register" element={<Navigate to="/" replace />} />
+            </>
           )}
         </Route>
       </Routes>
