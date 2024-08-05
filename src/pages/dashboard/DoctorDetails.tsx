@@ -2,15 +2,17 @@ import {
   EllipsisOutlined,
   EnvironmentFilled,
   LeftOutlined,
+  WalletOutlined,
 } from "@ant-design/icons";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useDoctorDetails } from "../../hooks/useDoctorDetails";
 import { Image, Rate } from "antd";
 import BookAppointment from "../../components/molecules/BookAppointment";
+import { DEFAULT_APPOINTMENT_PRICE } from "../../constants/payment.constants";
 
 const DoctorDetails: React.FC = () => {
-  const { doctorDetails, isLoading } = useDoctorDetails();
+  const { doctorDetails, isLoading, fetchDoctorDetails } = useDoctorDetails();
   const navigate = useNavigate();
 
   return (
@@ -46,6 +48,10 @@ const DoctorDetails: React.FC = () => {
                 <EnvironmentFilled />
                 <p className="text-gray-600">800m away</p>
               </div>
+              <div className="flex items-center gap-1">
+                <WalletOutlined />
+                <p className="text-gray-600">{`${DEFAULT_APPOINTMENT_PRICE.amount} ${DEFAULT_APPOINTMENT_PRICE.currency}`}</p>
+              </div>
             </div>
           </div>
           <div className="mt-[2rem]">
@@ -53,7 +59,10 @@ const DoctorDetails: React.FC = () => {
             <p>{doctorDetails?.about}</p>
           </div>
 
-          <BookAppointment availability={doctorDetails?.availability} />
+          <BookAppointment
+            availability={doctorDetails?.availability}
+            fetchDoctorDetails={fetchDoctorDetails}
+          />
         </div>
       )}
     </div>

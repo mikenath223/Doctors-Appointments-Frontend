@@ -9,14 +9,15 @@ This project is the frontend for the doctors appointment booking application.
 - Node.js (version 18 or higher)
 - npm or yarn
 - firebase auth
+- flutterwave checkout
 
 ## Setup
 
 1. **Clone the repository:**
 
    ```sh
-   git clone https://github.com/Emmybritt/doctors-appointment-booking-frontend.git
-   cd appointment-booking-frontend
+   git clone https://github.com/mikenath223/doctors-appointments-frontend-extended.git
+   cd doctors-appointments-frontend-extended
    ```
 
 2. **Install dependencies:**
@@ -40,6 +41,7 @@ This project is the frontend for the doctors appointment booking application.
    VITE_FIREBASE_STORAGE_BUCKET=fir-auth-311de.appspot.com
    VITE_FIREBASE_MESSAGING_SENDER_ID=185349758929
    VITE_FIREBASE_APP_ID=1:185349758929:web:ecbd1eb36813dfb2544af0p
+   VITE_FLUTTERWAVE_PUBLIC_KEY=FLWPUBK_TEST-b544f7af151db2a4b6c29ffc072b4231-X
    ```
 
 4. **Run the application:**
@@ -63,6 +65,10 @@ This project is the frontend for the doctors appointment booking application.
 
 - Secure user authentication using Firebase.
 - Login and registration functionalities.
+
+### Flutterwave Payment Integration:
+
+- Integrated Flutterwave payment gateway.
 
 ### Infinite Scrolling:
 
@@ -99,3 +105,19 @@ This project is the frontend for the doctors appointment booking application.
 ### Protected Routes:
 
 - Implemented route protection to ensure that only authenticated users can access certain pages.
+
+### Add dependent Profile:
+
+- Allows users to add profiles for their kids or other dependents.
+
+### View Profiles:
+
+- Allows users to view their added dependent profiles.
+
+### Cancel Appointment:
+
+- Functionality to cancel appointments and get refunded depending on certain criteria.
+
+### Reschedule Appointment:
+
+- Functionality to reschedule appointments.

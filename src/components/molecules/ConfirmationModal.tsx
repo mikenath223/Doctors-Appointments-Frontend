@@ -1,7 +1,6 @@
 import { Button, Modal } from "antd";
-import React from "react";
 
-interface CustomModalProp {
+interface ConfirmationModalProp {
   isOpen: boolean;
   handleCancel: () => void;
   handleOk: () => void;
@@ -9,7 +8,7 @@ interface CustomModalProp {
   title: string;
   isLoading?: boolean;
 }
-const CustomModal: React.FC<CustomModalProp> = ({
+const ConfirmationModal: React.FC<ConfirmationModalProp> = ({
   isOpen,
   handleCancel,
   handleOk,
@@ -32,10 +31,11 @@ const CustomModal: React.FC<CustomModalProp> = ({
             key="submit"
             type="primary"
             typeof="submit"
+            className="bg-green-600 hover:!bg-green-700"
             loading={isLoading}
             onClick={handleOk}
           >
-            Make Payment
+            {isLoading ? "Loading..." : "Confirm"}
           </Button>,
         ]}
       >
@@ -45,4 +45,4 @@ const CustomModal: React.FC<CustomModalProp> = ({
   );
 };
 
-export default CustomModal;
+export default ConfirmationModal;

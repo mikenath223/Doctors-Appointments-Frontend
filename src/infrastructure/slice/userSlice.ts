@@ -3,7 +3,7 @@ import { UserSliceState } from "../../domain/user";
 
 const initialState: UserSliceState = {
   user: null,
-  loading: false,
+  loading: true,
 };
 
 const userSlice = createSlice({

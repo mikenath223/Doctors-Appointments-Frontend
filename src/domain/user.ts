@@ -4,6 +4,7 @@ export interface User {
   email: string;
   phoneNo: string;
   password: string;
+  photo: string;
 }
 
 export interface UserSliceState {
@@ -58,4 +59,13 @@ export interface Doctor {
 
 export interface DoctorDetails extends Omit<Doctor, "nextAvailableSlot"> {
   availability: Availability[];
+}
+
+export interface FindManyMockUsersAttr {
+  offset: 0;
+  limit: 10;
+}
+
+export interface MockUser extends User {
+  isUserDependentAdded: boolean;
 }

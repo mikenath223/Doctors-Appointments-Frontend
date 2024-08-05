@@ -4,38 +4,25 @@ import React from "react";
 interface CustomModalProp {
   isOpen: boolean;
   handleCancel: () => void;
-  handleOk: () => void;
   children: React.ReactNode;
   title: string;
   isLoading?: boolean;
 }
-const CustomModal: React.FC<CustomModalProp> = ({
+const AddDependentsModal: React.FC<CustomModalProp> = ({
   isOpen,
   handleCancel,
-  handleOk,
   children,
   title,
-  isLoading,
 }) => {
   return (
     <>
       <Modal
         title={title}
         open={isOpen}
-        onOk={handleOk}
         onCancel={handleCancel}
         footer={[
           <Button key="back" onClick={handleCancel}>
             Cancel
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            typeof="submit"
-            loading={isLoading}
-            onClick={handleOk}
-          >
-            Make Payment
           </Button>,
         ]}
       >
@@ -45,4 +32,4 @@ const CustomModal: React.FC<CustomModalProp> = ({
   );
 };
 
-export default CustomModal;
+export default AddDependentsModal;

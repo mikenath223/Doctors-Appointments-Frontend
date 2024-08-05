@@ -1,6 +1,6 @@
 import { LeftOutlined } from "@ant-design/icons";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useMemo } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppointment } from "../../hooks/useAppointments";
 import BookingCard from "../../components/molecules/BookingCard";
 
@@ -8,18 +8,28 @@ const tabs = ["UPCOMING", "COMPLETED", "CANCELLED"];
 
 const Appointments: React.FC = () => {
   const navigate = useNavigate();
-  const { currTab, setCurrTab, appointments, isFetchingAppointments } =
-    useAppointment();
+  const {
+    currTab,
+    setCurrTab,
+    appointments,
+    isFetchingAppointments,
+    fetchAppointments,
+  } = useAppointment();
 
-  const filteredAppointments = appointments?.filter(
-    (appointment) => appointment.status === currTab
+  const filteredAppointments = useMemo(
+    () => appointments?.filter((appointment) => appointment.status === currTab),
+    [appointments, currTab]
   );
+
+  const { dependentId } = useParams();
 
   return (
     <div>
       <div className="flex items-center space-x-[6rem]">
         <LeftOutlined onClick={() => navigate(-1)} />
-        <h3 className="py-[2rem] font-bold text-[20px]">My Bookings</h3>
+        <h3 className="py-[2rem] font-bold text-[20px]">{`My Bookings${
+          dependentId ? " for dependent profile" : ""
+        }`}</h3>
       </div>
 
       <div className="w-full px-4">
@@ -49,6 +59,14 @@ const Appointments: React.FC = () => {
                 photo={appointment.doctor.photo}
                 specialty={appointment.doctor.specialty}
                 time={appointment.time}
+                meetingLink={appointment.meetingLink}
+                consultation={appointment.consultation}
+                amountPaid={appointment.amountPaid}
+                doctorId={appointment.doctorId}
+                appointmentId={appointment.id}
+                fetchAppointments={fetchAppointments}
+                appointMentStatus={appointment.status}
+                amountRefunded={appointment.refundAmount}
               />
             ))
           ) : (

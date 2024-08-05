@@ -11,13 +11,14 @@ import { setLoadingUserData, setUser } from "../infrastructure/slice/userSlice";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../infrastructure/firebase";
 import Appointments from "../pages/dashboard/Appointments";
+import Profiles from "../pages/dashboard/Profiles";
+import { Loading } from "../components/molecules/Loading";
 
 const Router = () => {
-  const { user } = useAppSelector((state) => state.userSlice);
+  const { user, loading } = useAppSelector((state) => state.userSlice);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(setLoadingUserData(true));
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user && user.emailVerified) {
         const docRef = doc(db, "users", user.uid);
@@ -44,26 +45,38 @@ const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<AppLayout />}>
-          {!user ? (
+          {!user && !loading && (
             <>
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
               <Route path="" element={<Navigate to="/login" replace />} />
+              <Route path="/*" element={<Navigate to="/login" replace />} />
             </>
-          ) : (
+          )}
+          {!user && loading && <Route path="/*" element={<Loading />} />}
+          {user && (
+            <>
+              <Route path="" element={<Dashboard isShowProfile />} />
+              <Route
+                path="/book-dependent-appointment/:dependentId"
+                element={<Dashboard />}
+              />
+              <Route
+                path="/book-dependent-appointment?/:dependentId?/reschedule-appointment?/:appointmentId?/doctor/:id"
+                element={<DoctorDetails />}
+              />
+              <Route
+                path="appointments/:dependentId?"
+                element={<Appointments />}
+              />
+              <Route path="profiles" element={<Profiles />} />
+            </>
+          )}
+          {user && (
             <>
               <Route path="/login" element={<Navigate to="/" replace />} />
               <Route path="/register" element={<Navigate to="/" replace />} />
             </>
-          )}
-          {user ? (
-            <>
-              <Route path="" element={<Dashboard />} />
-              <Route path="doctor/:id" element={<DoctorDetails />} />
-              <Route path="appointments" element={<Appointments />} />
-            </>
-          ) : (
-            <Route path="/*" element={<Navigate to="/login" replace />} />
           )}
         </Route>
       </Routes>
